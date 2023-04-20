@@ -1,0 +1,22 @@
+name: Merge test
+on:
+  push:
+    branches:
+      - test2
+  workflow_dispatch:
+
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Merge merge_checker3 -> merge_checker2
+        uses: everlytic/branch-merge@1.1.5
+        with:
+          github_token: ${{ secrets.MERGE_TOKEN }}
+          source_ref: test2
+          target_branch: test1
+          commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
