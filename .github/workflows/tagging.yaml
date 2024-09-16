@@ -33,8 +33,6 @@ jobs:
       - name: exit
         run: |
           exit 0
-
-##
   update-tags:
     name: Tag update for ${{ matrix.changed-folder }}
     strategy:
