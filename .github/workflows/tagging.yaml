@@ -71,7 +71,7 @@ jobs:
           echo "Tag to create ${{ steps.tag-name.outputs.tag-name }} " >> ${GITHUB_STEP_SUMMARY}
 
       - name: Bump version and push tag
-        uses: timothyclarke/github-tag-action@3acdde762914d227cfe7817860c4d8945b880319
+        uses: timothyclarke/github-tag-action@a970082a7a44289bdaa93dfdc33110b94ff86ee1
         # uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # if you don't want to set write permissions use a PAT token
