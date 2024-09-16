@@ -31,9 +31,7 @@ jobs:
           matrix: true
           files_ignore: |
             .github/**
-      - name: exit
-        run: |
-          exit 0
+
   update-tags:
     name: Tag update for ${{ matrix.changed-folder }}
     strategy:
@@ -56,7 +54,7 @@ jobs:
       - name: Generate tag name
         id: tag-name
         env:
-          FOLDER: ${{ matrix.module }}
+          FOLDER: ${{ matrix.changed-folder }}
         run: |
           for path in ${FOLDER}; do
             IFS='/' read -ra parts <<< "$path"
@@ -64,7 +62,7 @@ jobs:
               first=${parts[0]}
               second="${parts[1]}"
 
-              echo "tag-name=${first}-${second}" >> ${GITHUB_OUTPUT}
+              echo "tag-name=${first}-${second}-v" >> ${GITHUB_OUTPUT}
             fi
           done
       - name: Show tag - ${{ steps.tag-name.outputs.tag-name }}
@@ -72,7 +70,7 @@ jobs:
           echo "Tag to create ${{ steps.tag-name.outputs.tag-name }} " >> ${GITHUB_STEP_SUMMARY}
 
       - name: Bump version and push tag
-        uses: timothyclarke/github-tag-action@9025e245458b0f7be661bbdc341519c5a6e025cf
+        uses: timothyclarke/github-tag-action@d80b21f44ba5b62ed4b9bb35c7032289e1fc10bf
         # uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # if you don't want to set write permissions use a PAT token
@@ -80,3 +78,4 @@ jobs:
           RELEASE_BRANCHES: tagging
           TAG_PREFIX: ${{ steps.tag-name.outputs.tag-name }}
           PRERELEASE: false
+          VERBOSE: true
