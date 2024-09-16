@@ -1,6 +1,7 @@
+---
 name: Tag Build
 
-on:
+on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
   push:
     branches:
@@ -30,10 +31,10 @@ jobs:
           matrix: true
           files_ignore: |
             .github/**
-
-##
-
-  tag:
+      - name: exit
+        run: |
+          exit 0
+  update-tags:
     name: Tag update for ${{ matrix.changed-folder }}
     strategy:
       fail-fast: false
@@ -70,12 +71,12 @@ jobs:
         run: |
           echo "Tag to create ${{ steps.tag-name.outputs.tag-name }} " >> ${GITHUB_STEP_SUMMARY}
 
-    - name: Bump version and push tag
-      uses: timothyclarke/github-tag-action@9025e245458b0f7be661bbdc341519c5a6e025cf
-#      uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
-        DEFAULT_BRANCH: tagging
-        RELEASE_BRANCHES: tagging
-        TAG_PREFIX: ${{ steps.tag-name.outputs.tag-name }}
-        PRERELEASE: false
+      - name: Bump version and push tag
+        uses: timothyclarke/github-tag-action@9025e245458b0f7be661bbdc341519c5a6e025cf
+        # uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # if you don't want to set write permissions use a PAT token
+          DEFAULT_BRANCH: tagging
+          RELEASE_BRANCHES: tagging
+          TAG_PREFIX: ${{ steps.tag-name.outputs.tag-name }}
+          PRERELEASE: false
