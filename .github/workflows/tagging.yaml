@@ -30,10 +30,12 @@ jobs:
           matrix: true
           files_ignore: |
             .github/**
+      - name: exit
+        run: |
+          exit 0
 
 ##
-
-  tag:
+  update-tags:
     name: Tag update for ${{ matrix.changed-folder }}
     strategy:
       fail-fast: false
