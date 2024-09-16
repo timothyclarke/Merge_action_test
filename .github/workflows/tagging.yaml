@@ -58,10 +58,11 @@ jobs:
         run: |
           for path in ${FOLDER}; do
             IFS='/' read -ra parts <<< "$path"
-            if [ "${#parts[@]}" -ge 3 ]; then
+            if [ "${#parts[@]}" -ge 2 ]; then
               first=${parts[0]}
               second="${parts[1]}"
 
+              echo "tag-name=${first}-${second}-v"
               echo "tag-name=${first}-${second}-v" >> ${GITHUB_OUTPUT}
             fi
           done
