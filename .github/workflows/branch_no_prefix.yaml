@@ -1,0 +1,32 @@
+---
+name: Branch no Prefix
+
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:
+  push:
+    branches:
+      - branch_no_prefix
+
+jobs:
+  update-tags:
+    name: Tag update for Branch No Prefix
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Github Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Bump version and push tag
+        uses: timothyclarke/github-tag-action@a970082a7a44289bdaa93dfdc33110b94ff86ee1
+        # uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # if you don't want to set write permissions use a PAT token
+          DEFAULT_BRANCH: branch_no_prefix
+          RELEASE_BRANCHES: branch_no_prefix
+          PRERELEASE: false
+          DEFAULT_BUMP: patch
+          BRANCH_HISTORY: last
+          VERBOSE: true
